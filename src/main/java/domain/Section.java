@@ -9,14 +9,9 @@ public class Section {
 
     private Long id;
     private String state;
+
+    private Kanban kanban;
     private List<Fiche> fiches = new ArrayList<Fiche>();
-
-    public Section() {
-    }
-
-    public Section(String state ) {
-        this.state = state;
-    }
 
     @Id
     @GeneratedValue
@@ -36,12 +31,28 @@ public class Section {
         this.state = state;
     }
 
-    @OneToMany(mappedBy = "section", fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL)
+    public Kanban getKanban() {
+        return kanban;
+    }
+
+    public void setKanban(Kanban kanban) {
+        this.kanban = kanban;
+    }
+
+    @OneToMany(mappedBy = "section", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public List<Fiche> getFiches() {
         return fiches;
     }
 
     public void setFiches(List<Fiche> fiches) {
-        this.fiches = fiches;
+        this.fiches.addAll(fiches);
+    }
+
+    public void addFiches(Fiche fiche) {
+        fiche.setSection(this);
+        List<Fiche> listeFiches = new ArrayList<Fiche>();
+        listeFiches.add(fiche);
+        this.setFiches(listeFiches);
     }
 }

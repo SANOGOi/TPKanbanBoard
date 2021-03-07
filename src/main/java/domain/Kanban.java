@@ -1,30 +1,23 @@
 package domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Kanban {
 
-    private List<Section> sections;
-    private String label;
+    private String titreProjet;
     private long id;
+    private List<Section> sections = new ArrayList<Section>();
 
 
-    public void setSections(List<Section> sections) {
-        this.sections = sections;
+    public String getTitreProjet() {
+        return titreProjet;
     }
 
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
+    public void setTitreProjet(String titreProjet) {
+        this.titreProjet = titreProjet;
     }
 
     @Id
@@ -41,12 +34,20 @@ public class Kanban {
         sections = new ArrayList<>();
     }
 
+    @OneToMany(mappedBy = "kanban", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    public List<Section> getSections() {
+        return sections;
+    }
 
+    public void setSections(List<Section> sections) {
+        this.sections.addAll(sections);
+    }
 
-
-
-
-
-
+    public void addSection(Section section) {
+        section.setKanban(this);
+        List<Section> listSection = new ArrayList<Section>();
+        listSection.add(section);
+        this.setSections(listSection);
+    }
 
 }

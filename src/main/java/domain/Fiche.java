@@ -1,6 +1,7 @@
 package domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,16 +16,8 @@ public class Fiche {
     private String note;
 
     private Utilisateur utilisateur;
-    private List<Tags> tags;
+    private List<Tags> tags = new ArrayList<Tags>();
     private Section section;
-
-    public Fiche(String libelle, Date dateButoire, String lieu, String url, String note) {
-        this.libelle = libelle;
-        this.dateButoire = dateButoire;
-        this.lieu = lieu;
-        this.url = url;
-        this.note = note;
-    }
 
     @Id
     @GeneratedValue
@@ -53,7 +46,7 @@ public class Fiche {
         this.dateButoire = dateButoire;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     public Utilisateur getUtilisateur() {
         return utilisateur;
     }
@@ -62,13 +55,13 @@ public class Fiche {
         this.utilisateur = utilisateur;
     }
 
-    @OneToMany(mappedBy = "fiche", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "fiche", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     public List<Tags> getTags() {
         return tags;
     }
 
     public void setTags(List<Tags> tags) {
-        this.tags = tags;
+        this.tags.addAll(tags);
     }
 
     public String getLieu() {
@@ -95,12 +88,20 @@ public class Fiche {
         this.note = note;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     public Section getSection() {
         return section;
     }
 
     public void setSection(Section section) {
         this.section = section;
+    }
+
+    public void addTags(Tags tag) {
+
+        tag.setFiche(this);
+        List<Tags> listTags = new ArrayList<Tags>();
+        listTags.add(tag);
+        this.setTags(listTags);
     }
 }

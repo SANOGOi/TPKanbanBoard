@@ -9,28 +9,10 @@ import java.util.List;
 public class Utilisateur {
 
     private Long id;
-    private String nom;
-    private String prenom;
-    private Date dateDeNaissance;
+    private String speudo;
     private String poste;
-    private int age;
 
     private List<Fiche> fiches = new ArrayList<Fiche>();
-
-    public Utilisateur() {
-    }
-
-    public Utilisateur(String nom, String prenom, Date dateDeNaissance, String poste) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.dateDeNaissance = dateDeNaissance;
-        this.poste = poste;
-    }
-
-    public Utilisateur(String nom, String prenom) {
-        this.nom = nom;
-        this.prenom = prenom;
-    }
 
     @Id
     @GeneratedValue
@@ -42,47 +24,21 @@ public class Utilisateur {
         this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getSpeudo() {
+        return speudo;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setSpeudo(String speudo) {
+        this.speudo = speudo;
     }
 
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    @Temporal(TemporalType.DATE)
-    public Date getDateDeNaissance() {
-        return dateDeNaissance;
-    }
-
-    public void setDateDeNaissance(Date dateDeNaissance) {
-        this.dateDeNaissance = dateDeNaissance;
-    }
-
-    @Transient
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    @OneToMany(mappedBy = "utilisateur", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "utilisateur", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public List<Fiche> getFiches() {
         return fiches;
     }
 
     public void setFiches(List<Fiche> fiches) {
-        this.fiches = fiches;
+        this.fiches.addAll(fiches);
     }
 
     public String getPoste() {
@@ -91,5 +47,12 @@ public class Utilisateur {
 
     public void setPoste(String poste) {
         this.poste = poste;
+    }
+
+    public void addFiches(Fiche fiche) {
+        fiche.setUtilisateur(this);
+        List<Fiche> listeFiches = new ArrayList<Fiche>();
+        listeFiches.add(fiche);
+        this.setFiches(listeFiches);
     }
 }

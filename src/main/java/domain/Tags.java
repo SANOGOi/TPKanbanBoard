@@ -1,9 +1,6 @@
 package domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Tags {
@@ -11,10 +8,6 @@ public class Tags {
     private long id;
     private String libelle;
     private Fiche fiche;
-
-    public Tags(String libelle){
-        this.libelle = libelle;
-    }
 
     @Id
     @GeneratedValue
@@ -34,7 +27,7 @@ public class Tags {
         this.libelle = libelle;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     public Fiche getFiche() {
         return fiche;
     }
