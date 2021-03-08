@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@NamedQuery(
+        name="findFicheByLibelle",
+        query = "select f from Fiche f where f.libelle = :lib"
+)
 public class Fiche {
 
     private long id;
